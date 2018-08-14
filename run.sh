@@ -5,7 +5,9 @@
 
 CACHEDIR=${CACHEDIR:-/var/lib/docker-proxy/cache}
 CERTDIR=${CERTDIR:-/var/lib/docker-proxy/ssl}
-CONTAINER_NAME=${CONTAINER_NAME:-docker-proxy}
+# CONTAINER_NAME=${CONTAINER_NAME:-docker-proxy}
+IMAGE_NAME=${IMAGE_NAME:-nakisa/micros:docker-proxy}
+CONTAINER_NAME=$(echo $IMAGE_NAME | sed 's/[\/\:]/-/g')
 if [ "$1" = 'ssl' ]; then
     WITH_SSL=yes
 else
@@ -14,8 +16,8 @@ fi
 
 set -e
 
-sudo docker images | grep -q "^${CONTAINER_NAME} " \
-    || (echo "Build ${CONTAINER_NAME} image first" && exit 1)
+sudo docker images | awk '{print $1":"$2}' | grep -q -i "^${IMAGE_NAME}" \
+    || (echo "Build ${IMAGE_NAME} image first" && exit 1)
 
 start_routing () {
   # Add a new route table that routes everything marked through the new container
@@ -102,8 +104,9 @@ run () {
         --name ${CONTAINER_NAME} \
         --volume="${CACHEDIR}":/var/spool/squid3 \
         --volume="${CERTDIR}":/etc/squid3/ssl_cert \
+        --add-host localhost:172.17.0.1 \
         --publish=3128:3128 \
-        ${CONTAINER_NAME})
+        ${IMAGE_NAME})
   IPADDR=$(sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' ${CID})
   start_routing
   # Run at console, kill cleanly if ctrl-c is hit
