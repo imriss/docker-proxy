@@ -6,7 +6,7 @@
 CACHEDIR=${CACHEDIR:-/var/lib/docker-proxy/cache}
 CERTDIR=${CERTDIR:-/var/lib/docker-proxy/ssl}
 # CONTAINER_NAME=${CONTAINER_NAME:-docker-proxy}
-IMAGE_NAME=${IMAGE_NAME:-nakisa/micros:docker-proxy}
+IMAGE_NAME=${IMAGE_NAME:-imriss/docker-proxy:latest}
 CONTAINER_NAME=$(echo $IMAGE_NAME | sed 's/[\/\:]/-/g')
 if [ "$1" = 'ssl' ]; then
     WITH_SSL=yes
