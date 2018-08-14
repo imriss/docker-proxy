@@ -2,14 +2,18 @@ FROM imriss/docker-squid
 
 MAINTAINER Reza Farrahi <imriss@yahoo.com>
 
-RUN pacman -Syyu --noconfirm --needed \
- && pacman -S --noconfirm --needed iptables \
- && rm -rf /var/cache/pacman/pkg/*
+ENV SQUID_VERSION=4.2 \
+    SQUID_CACHE_DIR=/var/cache/squid \
+    SQUID_LOG_DIR=/var/log/squid \
+    SQUID_USER=proxy
 
-# Customise and build Squid.
-# It's silly, but run dpkg-buildpackage again if it fails the first time. This
-# is needed because sometimes the `configure` script is busy when building in
-# Docker after autoconf sets its mode +x.
+RUN pacman -Syyu --noconfirm --needed \
+ && pacman -S --noconfirm --needed squid iproute2 iptables \
+ && rm -rf /var/cache/pacman/pkg/* \
+ && groupadd proxy \
+ && useradd -g proxy proxy
+
+# Customize
 COPY mime.conf /root/
 RUN mkdir -p /etc/squid/ssl_cert \
     && cat /root/mime.conf >> /etc/squid/mime.conf
