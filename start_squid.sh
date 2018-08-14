@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function gen-cert() {
-    pushd /etc/squid3/ssl_cert > /dev/null
+    pushd /etc/squid/ssl_cert > /dev/null
     if [ ! -f ca.pem ]; then
         openssl req -new -newkey rsa:2048 -sha256 -days 365 -nodes \
             -x509 -keyout privkey.pem -out ca.pem \
@@ -30,14 +30,14 @@ function start-routing() {
 
 function init-cache() {
     # Make sure our cache is setup
-    touch /var/log/squid3/access.log /var/log/squid3/cache.log
-    chown proxy.proxy -R /var/spool/squid3 /var/log/squid3
-    [ -e /var/spool/squid3/swap.state ] || squid3 -z 2>/dev/null
+    touch /var/log/squid/access.log /var/log/squid/cache.log
+    chown proxy.proxy -R /var/cache/squid /var/log/squid
+    [ -e /var/cache/squid/swap.state ] || squid -z 2>/dev/null
 }
 
 gen-cert || exit 1
 start-routing || exit 1
 init-cache
 
-squid3
-tail -f /var/log/squid3/access.log /var/log/squid3/cache.log
+squid
+tail -f /var/log/squid/access.log /var/log/squid/cache.log
