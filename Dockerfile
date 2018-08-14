@@ -1,4 +1,4 @@
-FROM imriss/docker-squid
+FROM base/archlinux
 
 MAINTAINER Reza Farrahi <imriss@yahoo.com>
 
