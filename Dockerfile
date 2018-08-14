@@ -4,7 +4,7 @@ MAINTAINER Reza Farrahi <imriss@yahoo.com>
 
 RUN pacman -Syyu --noconfirm --needed \
  && pacman -S --noconfirm --needed iptables \
- && rm -rf /var/cache/pacman/pkg/* \
+ && rm -rf /var/cache/pacman/pkg/*
 
 # Customise and build Squid.
 # It's silly, but run dpkg-buildpackage again if it fails the first time. This
