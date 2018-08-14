@@ -15,7 +15,7 @@ function gen-cert() {
     openssl x509 -sha1 -in ca.pem -noout -fingerprint
     # Make CA certificate available for download via HTTP Forwarding port
     # e.g. GET http://docker-proxy:3128/squid-internal-static/icons/ca.pem
-    cp `pwd`/ca.* /usr/share/squid3/icons/
+    cp `pwd`/ca.* /etc/squid/icons/
     popd > /dev/null
     return $?
 }

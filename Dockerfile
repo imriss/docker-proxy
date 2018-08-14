@@ -2,6 +2,10 @@ FROM imriss/docker-squid
 
 MAINTAINER Reza Farrahi <imriss@yahoo.com>
 
+RUN pacman -Syyu --noconfirm --needed \
+ && pacman -S --noconfirm --needed iptables \
+ && rm -rf /var/cache/pacman/pkg/* \
+
 # Customise and build Squid.
 # It's silly, but run dpkg-buildpackage again if it fails the first time. This
 # is needed because sometimes the `configure` script is busy when building in
