@@ -20,4 +20,5 @@ COPY start_squid.sh /usr/local/bin/start_squid.sh
 VOLUME /var/cache/squid /etc/squid/ssl_cert
 EXPOSE 3128 3129 3130
 
+ENTRYPOINT []
 CMD ["/usr/local/bin/start_squid.sh"]
